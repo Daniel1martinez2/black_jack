@@ -72,6 +72,12 @@ def cal_total(list):
     current += i
   return current
 def game():
+  def repeat_game():
+    if input("Do you want to play a game of Blackjack? Type 'y' or 'n':") == "y":
+      clear()
+      game()
+    else:
+      return
   players = [
     {
       "name": "dealer",
@@ -90,14 +96,32 @@ def game():
     player["total"] = cal_total(player["cards"])
     if players[0]["total"] == 21:
       print("House wins")
-      return
+      print(players[0]["total"])
+      repeat_game()
     elif players[1]["total"] == 21:
       print("Player one wins")
-      return
+      print(players[1]["total"])
+      repeat_game()
 
-  print(f"Your cards: { players[1]['cards'] }, current score: {players[1]['total']}")
-  print(f"Computer's first card: {players[0]['cards'][0]}")
+  def status():
+    print(f"Your cards: { players[1]['cards'] }, current score: {players[1]['total']}")
+    print(f"Computer's first card: {players[0]['cards'][0]}")
+  status()
 
+  keep_playing = True
+  while keep_playing:
+    if input("Type 'y' to get another card, type 'n' to pass:") == "n":
+      status()
+      keep_playing = False
+    else:  
+      players[1]["cards"].append(random.choice(cards))
+      players[1]["total"] = cal_total(players[1]["cards"])
+      status()
+      if players[1]["total"] >= 21:
+        keep_playing = False
+        print("You loose, sorry 🥵")
+        repeat_game()
+    
 wanna_play = input("Do you want to play a game of Blackjack? Type 'y' or 'n':")
 
 if wanna_play == "y":
